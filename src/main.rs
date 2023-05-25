@@ -11,6 +11,7 @@ use imageproc::{drawing::draw_filled_rect_mut, rect::Rect};
 use ini::{Ini, WriteOption, EscapePolicy, LineSeparator};
 use native_dialog::FileDialog;
 use regex::Regex;
+use std::process;
 
 mod blend;
 
@@ -22,6 +23,8 @@ macro_rules! exit {
     println!("Press any key to exit");
 
     let _ = stdin.read(&mut [0u8]).unwrap();
+
+    process::exit(0);
   };
 }
 
@@ -161,7 +164,6 @@ fn generate_skin(
   match fs_extra::dir::copy(path.clone(), new_path.clone(), &CopyOptions::new().content_only(true)) {
     Err(err) => {
       exit!("Unable to clone the skin");
-      return
     },
     _ => {}
   };
@@ -246,7 +248,6 @@ fn main() {
   let path = match path {
     None => {
       exit!("No skin selected. Terminating.");
-      return
     },
     Some(path) => path,
   };
@@ -255,7 +256,6 @@ fn main() {
     Ok(ini) => ini,
     Err(_) => {
       exit!("Unable to parse skin.ini");
-      return
     }
   };
 
